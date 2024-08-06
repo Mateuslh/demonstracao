@@ -17,11 +17,11 @@ import java.math.BigDecimal;
 public class Divida {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private Long id;
 
     @OneToOne
-    @JoinColumn(nullable = false, unique = true)
+    @JoinColumn(nullable = true, unique = true)
     private Debito debitoOrigem;
 
     @Enumerated(EnumType.STRING)

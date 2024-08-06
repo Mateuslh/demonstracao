@@ -15,7 +15,7 @@ import lombok.Setter;
 public class Contribuinte {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true, unique = true)
     private Long id;
 
     private Long codigo;
