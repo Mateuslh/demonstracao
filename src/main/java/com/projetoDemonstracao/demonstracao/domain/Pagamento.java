@@ -19,7 +19,7 @@ public class Pagamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = true, unique = true)
+    @Column(nullable = false, unique = true)
     private Long id;
     @ManyToOne
     private Debito debito;
@@ -29,7 +29,7 @@ public class Pagamento {
     private BigDecimal valorPago;
     private Date dataPagamento;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column(nullable = false)
     private DestinoPagamento destinoPagamento;
     @Enumerated(EnumType.STRING)
     private SituacaoPagamento situacaoPagamento;
