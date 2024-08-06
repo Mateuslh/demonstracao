@@ -17,11 +17,11 @@ import java.math.BigDecimal;
 public class Divida {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = true, unique = true)
+    @Column(nullable = false, unique = true)
     private Long id;
 
     @OneToOne
-    @JoinColumn(nullable = true, unique = true)
+    @JoinColumn(nullable = false, unique = true)
     private Debito debitoOrigem;
 
     @Enumerated(EnumType.STRING)
@@ -32,4 +32,6 @@ public class Divida {
     private BigDecimal valorDesconto;
 
     private BigDecimal valorAcrescimo;
+
+    private BigDecimal valorPago;
 }

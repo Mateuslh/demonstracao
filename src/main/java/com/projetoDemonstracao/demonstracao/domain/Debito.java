@@ -32,4 +32,6 @@ public class Debito {
     private BigDecimal valorDesconto;
 
     private BigDecimal valorAcrescimo;
+
+    private BigDecimal valorPago;
 }

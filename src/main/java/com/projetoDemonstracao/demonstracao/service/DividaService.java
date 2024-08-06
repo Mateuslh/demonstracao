@@ -2,7 +2,10 @@ package com.projetoDemonstracao.demonstracao.service;
 
 import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
+import com.projetoDemonstracao.demonstracao.enums.SituacaoGuia;
 import com.projetoDemonstracao.demonstracao.exception.EntidadeNaoEncontradaException;
+import com.projetoDemonstracao.demonstracao.exception.GuiaNaoAbertaParaPagamentoException;
+import com.projetoDemonstracao.demonstracao.exception.GuiaSemSaldoAbaterException;
 import com.projetoDemonstracao.demonstracao.repository.DebitoRepository;
 import com.projetoDemonstracao.demonstracao.repository.DividaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +47,42 @@ public class DividaService {
         return null;
     }
 
-    public BigDecimal getValorAtualDebito(Debito debito) {
-        return nullToZero(debito.getValorLancado())
-                .add(nullToZero(debito.getValorAcrescimo()))
-                .subtract(nullToZero(debito.getValorDesconto()));
+    public BigDecimal getValorTotal(Divida divida) {
+        return nullToZero(divida.getValorLancado())
+                .add(nullToZero(divida.getValorAcrescimo()))
+                .subtract(nullToZero(divida.getValorDesconto()));
+    }
+
+    public BigDecimal getValorAberto(Divida divida){
+        return getValorTotal(divida).subtract(nullToZero(divida.getValorPago()));
+    }
+
+    public void pagarDivida(Divida divida, BigDecimal valorPago) {
+        BigDecimal valorTotalDebito = getValorTotal(divida);
+        BigDecimal valorAberto = getValorAberto(divida);
+
+        if (divida.getSituacaoGuia() != SituacaoGuia.ABERTA) {
+            throw new GuiaNaoAbertaParaPagamentoException("A dívida precisa estar aberta para realizar o pagamento.");
+        }
+
+        if (valorAberto.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new GuiaSemSaldoAbaterException("Dívida sem saldo para abater.");
+        }
+
+        if (valorPago.compareTo(valorAberto) > 0) {
+            // Implementar lógica de criar saldo (essa parte eu vou fazer depois) #1
+        }
+
+        BigDecimal novoValorPago = nullToZero(divida.getValorPago()).add(valorPago);
+        if (novoValorPago.compareTo(valorTotalDebito) > 0) {
+            novoValorPago = valorTotalDebito;
+        }
+        divida.setValorPago(novoValorPago);
+
+        if (getValorAberto(divida).compareTo(BigDecimal.ZERO) == 0) {
+            divida.setSituacaoGuia(SituacaoGuia.PAGA);
+        }
+
+        dividaRepository.save(divida);
     }
 }
