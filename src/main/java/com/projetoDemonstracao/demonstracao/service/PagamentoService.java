@@ -61,9 +61,6 @@ public class PagamentoService {
     private boolean pagamentoTemDestinoInformado(Pagamento pagamento) {
         if (pagamento.getDestinoPagamento() == Pagamento.DestinoPagamento.DIVIDA && pagamento.getDivida() == null) {
             return false;
-        } else if (pagamento.getDestinoPagamento() == Pagamento.DestinoPagamento.DEBITO && pagamento.getDebito() == null) {
-            return false;
-        }
-        return true;
+        } else return pagamento.getDestinoPagamento() != Pagamento.DestinoPagamento.DEBITO || pagamento.getDebito() != null;
     }
 }

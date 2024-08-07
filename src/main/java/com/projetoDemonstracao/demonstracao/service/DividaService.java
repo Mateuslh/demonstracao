@@ -80,7 +80,7 @@ public class DividaService {
             BigDecimal saldoAtual = nullToZero(contribuinte.getSaldo());
             BigDecimal novoSaldo = saldoAtual.add(valorRestante);
             contribuinte.setSaldo(novoSaldo);
-            contribuinteService.save(contribuinte); 
+            contribuinteService.save(contribuinte);
         }
 
         BigDecimal novoValorPago = nullToZero(divida.getValorPago()).add(valorPago);

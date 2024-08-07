@@ -1,5 +1,6 @@
 package com.projetoDemonstracao.demonstracao.config;
 
+import com.projetoDemonstracao.demonstracao.dto.ResponseDto;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
@@ -8,7 +9,6 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.stereotype.Component;
-import com.projetoDemonstracao.demonstracao.dto.ResponseDto;
 import org.springframework.web.method.HandlerMethod;
 
 @Component
