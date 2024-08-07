@@ -4,6 +4,7 @@ import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.dto.ResponseDto;
 import com.projetoDemonstracao.demonstracao.service.DebitoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController()
 @RequestMapping("/api/debitos")
+@Tag(name = "Debitos")
 public class DebitoController {
 
 
@@ -52,13 +54,6 @@ public class DebitoController {
         Debito debito = debitoService.findById(id);
         debitoService.delete(debito);
         ResponseDto<Void> response = new ResponseDto<>(true, "Debito deletado com sucesso", null);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/contribuinte/{contribuinteId}")
-    public ResponseEntity<ResponseDto<List<Debito>>> findByContribuinteId(@PathVariable Long contribuinteId) {
-        List<Debito> debitos = debitoService.findByContribuinteId(contribuinteId);
-        ResponseDto<List<Debito>> response = new ResponseDto<>(true, null, debitos);
         return ResponseEntity.ok(response);
     }
 
