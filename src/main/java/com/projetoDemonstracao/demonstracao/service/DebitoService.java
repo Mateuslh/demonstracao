@@ -1,5 +1,6 @@
 package com.projetoDemonstracao.demonstracao.service;
 
+import com.projetoDemonstracao.demonstracao.domain.Contribuinte;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.enums.SituacaoGuia;
@@ -53,7 +54,7 @@ public class DebitoService {
                 .subtract(nullToZero(debito.getValorDesconto()));
     }
 
-    public BigDecimal getValorAberto(Debito debito){
+    public BigDecimal getValorAberto(Debito debito) {
         return getValorTotal(debito).subtract(nullToZero(debito.getValorPago()));
     }
 
@@ -90,7 +91,11 @@ public class DebitoService {
         }
 
         if (valorPago.compareTo(valorAberto) > 0) {
-            // Implementar lógica de criar saldo (essa parte eu vou fazer depois) #1
+            BigDecimal valorRestante = valorPago.subtract(valorAberto);
+            Contribuinte contribuinte = debito.getContribuinte();
+            BigDecimal saldoAtual = nullToZero(contribuinte.getSaldo());
+            BigDecimal novoSaldo = saldoAtual.add(valorRestante);
+            contribuinte.setSaldo(novoSaldo);
         }
 
         BigDecimal novoValorPago = nullToZero(debito.getValorPago()).add(valorPago);

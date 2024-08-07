@@ -1,5 +1,6 @@
 package com.projetoDemonstracao.demonstracao.service;
 
+import com.projetoDemonstracao.demonstracao.domain.Contribuinte;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.enums.SituacaoGuia;
@@ -10,6 +11,7 @@ import com.projetoDemonstracao.demonstracao.repository.DebitoRepository;
 import com.projetoDemonstracao.demonstracao.repository.DividaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,6 +24,8 @@ public class DividaService {
     private DividaRepository dividaRepository;
     @Autowired
     private DebitoRepository debitoRepository;
+    @Autowired
+    private ContribuinteService contribuinteService;
 
     public List<Divida> findAll() {
         return dividaRepository.findAll();
@@ -53,10 +57,11 @@ public class DividaService {
                 .subtract(nullToZero(divida.getValorDesconto()));
     }
 
-    public BigDecimal getValorAberto(Divida divida){
+    public BigDecimal getValorAberto(Divida divida) {
         return getValorTotal(divida).subtract(nullToZero(divida.getValorPago()));
     }
 
+    @Transactional
     public void pagarDivida(Divida divida, BigDecimal valorPago) {
         BigDecimal valorTotalDebito = getValorTotal(divida);
         BigDecimal valorAberto = getValorAberto(divida);
@@ -69,8 +74,13 @@ public class DividaService {
             throw new GuiaSemSaldoAbaterException("Dívida sem saldo para abater.");
         }
 
-        if (valorPago.compareTo(valorAberto) > 0) {
-            // Implementar lógica de criar saldo (essa parte eu vou fazer depois) #1
+        BigDecimal valorRestante = valorPago.subtract(valorAberto);
+        if (valorRestante.compareTo(BigDecimal.ZERO) > 0) {
+            Contribuinte contribuinte = divida.getDebitoOrigem().getContribuinte();
+            BigDecimal saldoAtual = nullToZero(contribuinte.getSaldo());
+            BigDecimal novoSaldo = saldoAtual.add(valorRestante);
+            contribuinte.setSaldo(novoSaldo);
+            contribuinteService.save(contribuinte); 
         }
 
         BigDecimal novoValorPago = nullToZero(divida.getValorPago()).add(valorPago);
@@ -85,4 +95,5 @@ public class DividaService {
 
         dividaRepository.save(divida);
     }
+
 }
