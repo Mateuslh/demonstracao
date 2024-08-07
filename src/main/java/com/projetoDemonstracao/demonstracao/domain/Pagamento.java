@@ -27,7 +27,7 @@ public class Pagamento {
     @JoinColumn()
     private Divida divida;
     private BigDecimal valorPago;
-    private Date dataPagamento;
+    private Date dtPagamento;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DestinoPagamento destinoPagamento;
@@ -37,7 +37,9 @@ public class Pagamento {
     private TipoBaixa tipoBaixa;
 
     public enum SituacaoPagamento {PROCESSADO, ESTORNADO}
+
     public enum TipoBaixa {AUTOMATICA, MANUAL}
+
     public enum DestinoPagamento {DEBITO, DIVIDA}
 
 }
