@@ -3,6 +3,7 @@ package com.projetoDemonstracao.demonstracao.controller;
 import com.projetoDemonstracao.demonstracao.domain.Pagamento;
 import com.projetoDemonstracao.demonstracao.dto.ResponseDto;
 import com.projetoDemonstracao.demonstracao.service.PagamentoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/pagamentos")
+@Tag(name = "Pagamentos")
 public class PagamentoController {
 
     @Autowired

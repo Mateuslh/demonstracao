@@ -4,6 +4,14 @@ import com.projetoDemonstracao.demonstracao.domain.Contribuinte;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.dto.ResponseDto;
 import com.projetoDemonstracao.demonstracao.service.ContribuinteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +19,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController()
-@RequestMapping("/api/contribuinte")
+@RequestMapping("/api/contribuintes")
+@Tag(name = "Contribuientes")
 public class ContribuinteController {
 
 
     @Autowired
     private ContribuinteService contribuinteService;
 
+    @Operation(summary = "Busca todos os Contribuintes")
     @GetMapping
     public ResponseEntity<ResponseDto<List<Contribuinte>>> findAll() {
         List<Contribuinte> contribuintes = contribuinteService.findAll();
@@ -26,7 +36,8 @@ public class ContribuinteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseDto<Contribuinte>> findById(@PathVariable Long id) {
+    public ResponseEntity<ResponseDto<Contribuinte>> findById(
+            @Parameter(description = "id do Contribuinte") @PathVariable() Long id) {
         Contribuinte contribuinte = contribuinteService.findById(id);
         ResponseDto<Contribuinte> response = new ResponseDto<>(true, null, contribuinte);
         return ResponseEntity.ok(response);

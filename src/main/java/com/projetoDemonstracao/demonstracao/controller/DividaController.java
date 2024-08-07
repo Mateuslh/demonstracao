@@ -4,6 +4,7 @@ import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.dto.ResponseDto;
 import com.projetoDemonstracao.demonstracao.service.DividaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/dividas")
+@Tag(name = "Dividas")
 public class DividaController {
 
     @Autowired
