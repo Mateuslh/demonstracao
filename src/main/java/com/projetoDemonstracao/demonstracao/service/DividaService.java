@@ -61,6 +61,10 @@ public class DividaService {
         return getValorTotal(divida).subtract(nullToZero(divida.getValorPago()));
     }
 
+    public List<Divida> findAllByContribuinteId(Long contribuinteId) {
+        return dividaRepository.findAllByDebitoOrigem_Contribuinte_Id(contribuinteId);
+    }
+
     @Transactional
     public void pagarDivida(Divida divida, BigDecimal valorPago) {
         BigDecimal valorTotalDebito = getValorTotal(divida);

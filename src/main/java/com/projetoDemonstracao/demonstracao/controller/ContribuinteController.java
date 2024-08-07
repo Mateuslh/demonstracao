@@ -2,6 +2,7 @@ package com.projetoDemonstracao.demonstracao.controller;
 
 import com.projetoDemonstracao.demonstracao.domain.Contribuinte;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
+import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.dto.ResponseDto;
 import com.projetoDemonstracao.demonstracao.service.ContribuinteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,6 +67,14 @@ public class ContribuinteController {
         Contribuinte contribuinte = contribuinteService.findById(id);
         List<Debito> debitos = contribuinteService.findAllDebitos(contribuinte);
         ResponseDto<List<Debito>> response = new ResponseDto<>(true, null, debitos);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}/dividas")
+    public ResponseEntity<ResponseDto<List<Divida>>> findAllDividas(@PathVariable Long id) {
+        Contribuinte contribuinte = contribuinteService.findById(id);
+        List<Divida> dividas = contribuinteService.findAllDividas(contribuinte);
+        ResponseDto<List<Divida>> response = new ResponseDto<>(true, null, dividas);
         return ResponseEntity.ok(response);
     }
 

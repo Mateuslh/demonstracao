@@ -2,6 +2,7 @@ package com.projetoDemonstracao.demonstracao.service;
 
 import com.projetoDemonstracao.demonstracao.domain.Contribuinte;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
+import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.exception.EntidadeNaoEncontradaException;
 import com.projetoDemonstracao.demonstracao.repository.ContribuinteRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +28,9 @@ public class ContribuinteServiceTest {
 
     @Mock
     private DebitoService debitoService;
+
+    @Mock
+    private DividaService dividaService;
 
     @InjectMocks
     private ContribuinteService contribuinteService;
@@ -93,11 +97,22 @@ public class ContribuinteServiceTest {
     @Test
     void testFindAllDebitos() {
         List<Debito> debitos = Collections.singletonList(new Debito());
-        when(debitoService.findByContribuinteId(1L)).thenReturn(debitos);
+        when(debitoService.findAllByContribuinteId(1L)).thenReturn(debitos);
 
         List<Debito> result = contribuinteService.findAllDebitos(contribuinte);
 
         assertEquals(debitos, result);
-        verify(debitoService, times(1)).findByContribuinteId(1L);
+        verify(debitoService, times(1)).findAllByContribuinteId(1L);
+    }
+
+    @Test
+    void testFindAllDividas() {
+        List<Divida> dividas = Collections.singletonList(new Divida());
+        when(dividaService.findAllByContribuinteId(1L)).thenReturn(dividas);
+
+        List<Divida> result = contribuinteService.findAllDividas(contribuinte);
+
+        assertEquals(dividas, result);
+        verify(dividaService, times(1)).findAllByContribuinteId(1L);
     }
 }

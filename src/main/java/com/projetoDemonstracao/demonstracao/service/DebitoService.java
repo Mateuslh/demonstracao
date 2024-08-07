@@ -44,7 +44,7 @@ public class DebitoService {
         debitoRepository.delete(debito);
     }
 
-    public List<Debito> findByContribuinteId(Long contribuinteId) {
+    public List<Debito> findAllByContribuinteId(Long contribuinteId) {
         return debitoRepository.findDebitosByContribuinteId(contribuinteId);
     }
 

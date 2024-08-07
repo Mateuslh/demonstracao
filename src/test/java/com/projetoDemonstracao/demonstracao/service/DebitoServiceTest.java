@@ -88,7 +88,7 @@ class DebitoServiceTest {
 
         when(debitoRepository.findDebitosByContribuinteId(contribuinte.getId())).thenReturn(Arrays.asList(new Debito(), new Debito()));
 
-        List<Debito> result = debitoService.findByContribuinteId(contribuinte.getId());
+        List<Debito> result = debitoService.findAllByContribuinteId(contribuinte.getId());
         assertEquals(2, result.size());
         verify(debitoRepository, times(1)).findDebitosByContribuinteId(contribuinte.getId());
     }
