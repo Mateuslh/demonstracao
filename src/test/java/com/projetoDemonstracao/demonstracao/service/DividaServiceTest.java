@@ -1,4 +1,5 @@
 package com.projetoDemonstracao.demonstracao.service;
+
 import com.projetoDemonstracao.demonstracao.domain.Contribuinte;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
@@ -9,13 +10,11 @@ import com.projetoDemonstracao.demonstracao.exception.GuiaSemSaldoAbaterExceptio
 import com.projetoDemonstracao.demonstracao.exception.GuiaValorInferiorValorPagoException;
 import com.projetoDemonstracao.demonstracao.repository.DebitoRepository;
 import com.projetoDemonstracao.demonstracao.repository.DividaRepository;
-import com.projetoDemonstracao.demonstracao.service.ContribuinteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -23,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.projetoDemonstracao.demonstracao.utils.BigDecimalUtils.nullToZero;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;

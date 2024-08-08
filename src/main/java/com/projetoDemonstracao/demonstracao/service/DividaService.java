@@ -1,6 +1,5 @@
 package com.projetoDemonstracao.demonstracao.service;
 
-import com.projetoDemonstracao.demonstracao.domain.Contribuinte;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.enums.SituacaoGuia;
@@ -25,8 +24,6 @@ public class DividaService {
     private DividaRepository dividaRepository;
     @Autowired
     private DebitoRepository debitoRepository;
-    @Autowired
-    private ContribuinteService contribuinteService;
 
     public List<Divida> findAll() {
         return dividaRepository.findAll();
@@ -74,7 +71,6 @@ public class DividaService {
 
     @Transactional
     public void pagarDivida(Divida divida, BigDecimal valorPago) {
-        BigDecimal valorTotalDebito = getValorTotal(divida);
         BigDecimal valorAberto = getValorAberto(divida);
 
         if (divida.getSituacaoGuia() != SituacaoGuia.ABERTA) {
