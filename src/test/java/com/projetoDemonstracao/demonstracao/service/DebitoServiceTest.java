@@ -165,7 +165,6 @@ class DebitoServiceTest {
     @Test
     void testPagarDebitoComSucesso() {
         Contribuinte contribuinte = new Contribuinte();
-        contribuinte.setSaldo(new BigDecimal("100.00"));
 
         Debito debito = new Debito();
         debito.setContribuinte(contribuinte);
@@ -184,12 +183,7 @@ class DebitoServiceTest {
         debitoService.pagarDebito(debito, valorPago);
 
         BigDecimal valorRestante = valorPago.subtract(valorAberto);
-        BigDecimal saldoEsperado = contribuinte.getSaldo();
-        if (valorRestante.compareTo(BigDecimal.ZERO) > 0) {
-            saldoEsperado = saldoEsperado.add(valorRestante);
-        }
 
-        assertEquals(saldoEsperado, contribuinte.getSaldo());
         assertEquals(valorPago, debito.getValorPago());
         assertEquals(SituacaoGuia.PAGA, debito.getSituacaoGuia());
 

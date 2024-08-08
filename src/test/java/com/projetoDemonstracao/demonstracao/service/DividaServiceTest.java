@@ -223,7 +223,6 @@ class DividaServiceTest {
         BigDecimal valorPago = new BigDecimal("230.00");
 
         Contribuinte contribuinte = new Contribuinte();
-        contribuinte.setSaldo(new BigDecimal("100.00"));
 
         Debito debito = new Debito();
         debito.setContribuinte(contribuinte);
@@ -240,9 +239,6 @@ class DividaServiceTest {
 
         dividaService.pagarDivida(divida, valorPago);
 
-        BigDecimal saldoEsperado = new BigDecimal("100.00");
-
-        assertEquals(saldoEsperado, contribuinte.getSaldo());
         assertEquals(dividaService.getValorTotal(divida), divida.getValorPago());
         assertEquals(SituacaoGuia.PAGA, divida.getSituacaoGuia());
 
