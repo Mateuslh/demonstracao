@@ -5,19 +5,20 @@ import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.exception.EntidadeNaoEncontradaException;
 import com.projetoDemonstracao.demonstracao.repository.ContribuinteRepository;
+import com.projetoDemonstracao.demonstracao.repository.DebitoRepository;
+import com.projetoDemonstracao.demonstracao.repository.DividaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,10 +28,10 @@ public class ContribuinteServiceTest {
     private ContribuinteRepository contribuinteRepository;
 
     @Mock
-    private DebitoService debitoService;
+    private DebitoRepository debitoRepository;
 
     @Mock
-    private DividaService dividaService;
+    private DividaRepository dividaRepository;
 
     @InjectMocks
     private ContribuinteService contribuinteService;
@@ -86,6 +87,15 @@ public class ContribuinteServiceTest {
     }
 
     @Test
+    void testSaveWithNull() {
+        assertThrows(NullPointerException.class, () -> {
+            contribuinteService.save(null);
+        });
+
+        verify(contribuinteRepository, never()).save(any());
+    }
+
+    @Test
     void testDelete() {
         doNothing().when(contribuinteRepository).delete(contribuinte);
 
@@ -95,24 +105,64 @@ public class ContribuinteServiceTest {
     }
 
     @Test
+    void testDeleteWithNull() {
+        assertThrows(NullPointerException.class, () -> {
+            contribuinteService.delete(null);
+        });
+
+        verify(contribuinteRepository, never()).delete(any());
+    }
+
+    @Test
+    void testDeleteNonExistentContribuinte() {
+        doThrow(new EntidadeNaoEncontradaException("Contribuinte não encontrado")).when(contribuinteRepository).delete(any());
+
+        assertThrows(EntidadeNaoEncontradaException.class, () -> {
+            contribuinteService.delete(new Contribuinte());
+        });
+
+        verify(contribuinteRepository, times(1)).delete(any());
+    }
+
+    @Test
     void testFindAllDebitos() {
         List<Debito> debitos = Collections.singletonList(new Debito());
-        when(debitoService.findAllByContribuinteId(1L)).thenReturn(debitos);
+        when(debitoRepository.findDebitosByContribuinteId(1L)).thenReturn(debitos);
 
         List<Debito> result = contribuinteService.findAllDebitos(contribuinte);
 
         assertEquals(debitos, result);
-        verify(debitoService, times(1)).findAllByContribuinteId(1L);
+        verify(debitoRepository, times(1)).findDebitosByContribuinteId(1L);
+    }
+
+    @Test
+    void testFindAllDebitosEmpty() {
+        when(debitoRepository.findDebitosByContribuinteId(1L)).thenReturn(Collections.emptyList());
+
+        List<Debito> result = contribuinteService.findAllDebitos(contribuinte);
+
+        assertTrue(result.isEmpty());
+        verify(debitoRepository, times(1)).findDebitosByContribuinteId(1L);
     }
 
     @Test
     void testFindAllDividas() {
         List<Divida> dividas = Collections.singletonList(new Divida());
-        when(dividaService.findAllByContribuinteId(1L)).thenReturn(dividas);
+        when(dividaRepository.findAllByDebitoOrigem_Contribuinte_Id(1L)).thenReturn(dividas);
 
         List<Divida> result = contribuinteService.findAllDividas(contribuinte);
 
         assertEquals(dividas, result);
-        verify(dividaService, times(1)).findAllByContribuinteId(1L);
+        verify(dividaRepository, times(1)).findAllByDebitoOrigem_Contribuinte_Id(1L);
+    }
+
+    @Test
+    void testFindAllDividasEmpty() {
+        when(dividaRepository.findAllByDebitoOrigem_Contribuinte_Id(1L)).thenReturn(Collections.emptyList());
+
+        List<Divida> result = contribuinteService.findAllDividas(contribuinte);
+
+        assertTrue(result.isEmpty());
+        verify(dividaRepository, times(1)).findAllByDebitoOrigem_Contribuinte_Id(1L);
     }
 }

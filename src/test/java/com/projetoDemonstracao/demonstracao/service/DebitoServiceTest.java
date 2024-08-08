@@ -4,10 +4,7 @@ import com.projetoDemonstracao.demonstracao.domain.Contribuinte;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.enums.SituacaoGuia;
-import com.projetoDemonstracao.demonstracao.exception.DebitoNaoAbertoInscreverException;
-import com.projetoDemonstracao.demonstracao.exception.EntidadeNaoEncontradaException;
-import com.projetoDemonstracao.demonstracao.exception.GuiaNaoAbertaParaPagamentoException;
-import com.projetoDemonstracao.demonstracao.exception.GuiaSemSaldoAbaterException;
+import com.projetoDemonstracao.demonstracao.exception.*;
 import com.projetoDemonstracao.demonstracao.repository.DebitoRepository;
 import com.projetoDemonstracao.demonstracao.repository.DividaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -199,7 +196,6 @@ class DebitoServiceTest {
         verify(debitoRepository, times(1)).save(debito);
     }
 
-
     @Test
     void testPagarDebitoNaoAberta() {
         Debito debito = new Debito();
@@ -210,6 +206,8 @@ class DebitoServiceTest {
         assertThrows(GuiaNaoAbertaParaPagamentoException.class, () -> {
             debitoService.pagarDebito(debito, valorPago);
         });
+
+        verify(debitoRepository, never()).save(any(Debito.class));
     }
 
     @Test
@@ -226,5 +224,96 @@ class DebitoServiceTest {
         assertThrows(GuiaSemSaldoAbaterException.class, () -> {
             debitoService.pagarDebito(debito, valorPago);
         });
+
+        verify(debitoRepository, never()).save(any(Debito.class));
+    }
+
+    @Test
+    void testFindAll() {
+        List<Debito> debitos = Arrays.asList(new Debito(), new Debito());
+        when(debitoRepository.findAll()).thenReturn(debitos);
+
+        List<Debito> result = debitoService.findAll();
+        assertEquals(2, result.size());
+        verify(debitoRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testGetValorTotal() {
+        Debito debito = new Debito();
+        debito.setValorLancado(new BigDecimal("100.00"));
+        debito.setValorDesconto(new BigDecimal("10.00"));
+        debito.setValorAcrescimo(new BigDecimal("20.00"));
+
+        BigDecimal valorTotal = debitoService.getValorTotal(debito);
+        assertEquals(new BigDecimal("110.00"), valorTotal);
+    }
+
+    @Test
+    void testGetValorAberto() {
+        Debito debito = new Debito();
+        debito.setValorLancado(new BigDecimal("100.00"));
+        debito.setValorDesconto(new BigDecimal("10.00"));
+        debito.setValorAcrescimo(new BigDecimal("20.00"));
+        debito.setValorPago(new BigDecimal("50.00"));
+
+        BigDecimal valorAberto = debitoService.getValorAberto(debito);
+        assertEquals(new BigDecimal("60.00"), valorAberto);
+    }
+
+    @Test
+    void testPagarDebitoComValorExato() {
+        Debito debito = new Debito();
+        debito.setSituacaoGuia(SituacaoGuia.ABERTA);
+        debito.setValorLancado(new BigDecimal("100.00"));
+        debito.setValorDesconto(new BigDecimal("10.00"));
+        debito.setValorAcrescimo(new BigDecimal("20.00"));
+        debito.setValorPago(new BigDecimal("0.00"));
+
+        BigDecimal valorPago = new BigDecimal("110.00");
+
+        when(debitoRepository.save(any(Debito.class))).thenReturn(debito);
+
+        debitoService.pagarDebito(debito, valorPago);
+
+        assertEquals(valorPago, debito.getValorPago());
+        assertEquals(SituacaoGuia.PAGA, debito.getSituacaoGuia());
+        verify(debitoRepository, times(1)).save(debito);
+    }
+
+    @Test
+    void testPagarDebitoComValorMaior() {
+        Debito debito = new Debito();
+        debito.setSituacaoGuia(SituacaoGuia.ABERTA);
+        debito.setValorLancado(new BigDecimal("100.00"));
+        debito.setValorDesconto(new BigDecimal("10.00"));
+        debito.setValorAcrescimo(new BigDecimal("20.00"));
+        debito.setValorPago(new BigDecimal("0.00"));
+
+        BigDecimal valorPago = new BigDecimal("150.00");
+
+        assertThrows(GuiaValorInferiorValorPagoException.class, () -> {
+            debitoService.pagarDebito(debito, valorPago);
+        });
+
+        verify(debitoRepository, never()).save(any(Debito.class));
+    }
+
+    @Test
+    void testPagarDebitoComSaldoInsuficiente() {
+        Debito debito = new Debito();
+        debito.setSituacaoGuia(SituacaoGuia.ABERTA);
+        debito.setValorLancado(new BigDecimal("100.00"));
+        debito.setValorDesconto(new BigDecimal("10.00"));
+        debito.setValorAcrescimo(new BigDecimal("20.00"));
+        debito.setValorPago(new BigDecimal("110.00"));
+
+        BigDecimal valorPago = new BigDecimal("10.00");
+
+        assertThrows(GuiaSemSaldoAbaterException.class, () -> {
+            debitoService.pagarDebito(debito, valorPago);
+        });
+
+        verify(debitoRepository, never()).save(any(Debito.class));
     }
 }
