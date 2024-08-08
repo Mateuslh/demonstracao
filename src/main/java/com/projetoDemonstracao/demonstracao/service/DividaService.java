@@ -34,14 +34,20 @@ public class DividaService {
 
     public Divida findById(Long id) {
         return dividaRepository.findById(id)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Divida não encontrado com o id:" + id));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Divida não encontrada com o id:" + id));
     }
 
     public Divida save(Divida divida) {
+        if (divida == null) {
+            throw new NullPointerException("Divida não pode ser nula");
+        }
         return dividaRepository.save(divida);
     }
 
     public void delete(Divida divida) {
+        if (divida == null) {
+            throw new NullPointerException("Divida não pode ser nula");
+        }
         dividaRepository.delete(divida);
     }
 
@@ -90,5 +96,4 @@ public class DividaService {
 
         dividaRepository.save(divida);
     }
-
 }

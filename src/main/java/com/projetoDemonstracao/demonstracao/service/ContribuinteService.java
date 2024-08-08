@@ -32,10 +32,16 @@ public class ContribuinteService {
     }
 
     public Contribuinte save(Contribuinte contribuinte) {
+        if (contribuinte == null) {
+            throw new NullPointerException("Contribuinte não pode ser nulo");
+        }
         return contribuinteRepository.save(contribuinte);
     }
 
     public void delete(Contribuinte contribuinte) {
+        if (contribuinte == null) {
+            throw new NullPointerException("Contribuinte não pode ser nulo");
+        }
         contribuinteRepository.delete(contribuinte);
     }
 
@@ -46,6 +52,4 @@ public class ContribuinteService {
     public List<Divida> findAllDividas(Contribuinte contribuinte) {
         return dividaRepository.findAllByDebitoOrigem_Contribuinte_Id(contribuinte.getId());
     }
-
 }
-
