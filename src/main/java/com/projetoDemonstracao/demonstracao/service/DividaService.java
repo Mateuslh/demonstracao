@@ -49,8 +49,8 @@ public class DividaService {
     }
 
     public Debito findDebitoByDivida(Divida divida) {
-        if (divida.getDebitoOrigem() != null) {
-            return debitoRepository.getReferenceById(divida.getDebitoOrigem().getId());
+        if (divida.getDebito() != null) {
+            return debitoRepository.getReferenceById(divida.getDebito().getId());
         }
         return null;
     }
@@ -66,7 +66,7 @@ public class DividaService {
     }
 
     public List<Divida> findAllByContribuinteId(Long contribuinteId) {
-        return dividaRepository.findAllByDebitoOrigem_Contribuinte_Id(contribuinteId);
+        return dividaRepository.findAllByDebito_Contribuinte_Id(contribuinteId);
     }
 
     @Transactional

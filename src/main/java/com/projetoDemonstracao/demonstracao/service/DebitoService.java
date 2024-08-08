@@ -62,7 +62,7 @@ public class DebitoService {
         }
 
         Divida divida = new Divida();
-        divida.setDebitoOrigem(debito);
+        divida.setDebito(debito);
         divida.setSituacaoGuia(SituacaoGuia.ABERTA);
         divida.setValorLancado(debito.getValorLancado());
         divida.setValorDesconto(debito.getValorDesconto());

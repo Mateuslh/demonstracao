@@ -22,7 +22,7 @@ public class Divida {
 
     @OneToOne
     @JoinColumn(nullable = false, unique = true)
-    private Debito debitoOrigem;
+    private Debito debito;
 
     @Enumerated(EnumType.STRING)
     private SituacaoGuia situacaoGuia;
@@ -34,4 +34,7 @@ public class Divida {
     private BigDecimal valorAcrescimo;
 
     private BigDecimal valorPago;
+
+    public Divida(Long id) {
+    }
 }

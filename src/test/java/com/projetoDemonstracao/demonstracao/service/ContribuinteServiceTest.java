@@ -148,21 +148,21 @@ public class ContribuinteServiceTest {
     @Test
     void testFindAllDividas() {
         List<Divida> dividas = Collections.singletonList(new Divida());
-        when(dividaRepository.findAllByDebitoOrigem_Contribuinte_Id(1L)).thenReturn(dividas);
+        when(dividaRepository.findAllByDebito_Contribuinte_Id(1L)).thenReturn(dividas);
 
         List<Divida> result = contribuinteService.findAllDividas(contribuinte);
 
         assertEquals(dividas, result);
-        verify(dividaRepository, times(1)).findAllByDebitoOrigem_Contribuinte_Id(1L);
+        verify(dividaRepository, times(1)).findAllByDebito_Contribuinte_Id(1L);
     }
 
     @Test
     void testFindAllDividasEmpty() {
-        when(dividaRepository.findAllByDebitoOrigem_Contribuinte_Id(1L)).thenReturn(Collections.emptyList());
+        when(dividaRepository.findAllByDebito_Contribuinte_Id(1L)).thenReturn(Collections.emptyList());
 
         List<Divida> result = contribuinteService.findAllDividas(contribuinte);
 
         assertTrue(result.isEmpty());
-        verify(dividaRepository, times(1)).findAllByDebitoOrigem_Contribuinte_Id(1L);
+        verify(dividaRepository, times(1)).findAllByDebito_Contribuinte_Id(1L);
     }
 }

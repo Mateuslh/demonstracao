@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface DividaRepository extends JpaRepository<Divida, Long> {
-    List<Divida> findAllByDebitoOrigem_Contribuinte_Id(Long id);
+    List<Divida> findAllByDebito_Contribuinte_Id(Long id);
 }

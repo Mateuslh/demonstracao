@@ -2,6 +2,7 @@ package com.projetoDemonstracao.demonstracao.controller;
 
 import com.projetoDemonstracao.demonstracao.domain.Pagamento;
 import com.projetoDemonstracao.demonstracao.dto.ResponseDto;
+import com.projetoDemonstracao.demonstracao.dto.entityCreate.PagamentoCreateDTO;
 import com.projetoDemonstracao.demonstracao.service.PagamentoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,8 @@ public class PagamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto<Pagamento>> create(@RequestBody Pagamento pagamento) {
+    public ResponseEntity<ResponseDto<Pagamento>> create(@RequestBody PagamentoCreateDTO pagamentoCreateDTO) {
+        Pagamento pagamento = pagamentoCreateDTO.toPagamento();
         Pagamento novoPagamento = pagamentoService.save(pagamento);
         ResponseDto<Pagamento> response = new ResponseDto<>(true, "Pagamento criado com sucesso", novoPagamento);
         return ResponseEntity.ok(response);

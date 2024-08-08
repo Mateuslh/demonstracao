@@ -23,7 +23,6 @@ public class ConfiguracaoSaldo {
     @Positive
     private int qtDiasVencimento;
 
-
     public ConfiguracaoSaldo(int qtDiasVencimento) {
         this.qtDiasVencimento = qtDiasVencimento;
     }

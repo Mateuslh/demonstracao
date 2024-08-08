@@ -3,6 +3,7 @@ package com.projetoDemonstracao.demonstracao.controller;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.dto.ResponseDto;
+import com.projetoDemonstracao.demonstracao.dto.entityCreate.DividaCreateDTO;
 import com.projetoDemonstracao.demonstracao.service.DividaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,8 @@ public class DividaController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto<Divida>> create(@RequestBody Divida divida) {
+    public ResponseEntity<ResponseDto<Divida>> create(@RequestBody DividaCreateDTO dividaCreateDTO) {
+        Divida divida = dividaCreateDTO.toDivida();
         Divida novaDivida = dividaService.save(divida);
         ResponseDto<Divida> response = new ResponseDto<>(true, "Dívida criada com sucesso", novaDivida);
         return ResponseEntity.ok(response);

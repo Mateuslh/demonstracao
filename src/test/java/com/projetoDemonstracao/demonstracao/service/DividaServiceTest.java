@@ -121,7 +121,7 @@ class DividaServiceTest {
         Debito debito = new Debito();
         debito.setId(1L);
         Divida divida = new Divida();
-        divida.setDebitoOrigem(debito);
+        divida.setDebito(debito);
         when(debitoRepository.getReferenceById(1L)).thenReturn(debito);
 
         Debito result = dividaService.findDebitoByDivida(divida);
@@ -142,7 +142,7 @@ class DividaServiceTest {
         Divida divida = new Divida();
         Debito debito = new Debito();
         debito.setId(1L);
-        divida.setDebitoOrigem(debito);
+        divida.setDebito(debito);
 
         when(debitoRepository.getReferenceById(1L)).thenThrow(new EntidadeNaoEncontradaException("Débito não encontrado"));
 
@@ -202,20 +202,20 @@ class DividaServiceTest {
     @Test
     void testFindAllByContribuinteId() {
         List<Divida> dividas = Collections.singletonList(new Divida());
-        when(dividaRepository.findAllByDebitoOrigem_Contribuinte_Id(1L)).thenReturn(dividas);
+        when(dividaRepository.findAllByDebito_Contribuinte_Id(1L)).thenReturn(dividas);
 
         List<Divida> result = dividaService.findAllByContribuinteId(1L);
         assertEquals(dividas, result);
-        verify(dividaRepository, times(1)).findAllByDebitoOrigem_Contribuinte_Id(1L);
+        verify(dividaRepository, times(1)).findAllByDebito_Contribuinte_Id(1L);
     }
 
     @Test
     void testFindAllByContribuinteIdEmpty() {
-        when(dividaRepository.findAllByDebitoOrigem_Contribuinte_Id(1L)).thenReturn(Collections.emptyList());
+        when(dividaRepository.findAllByDebito_Contribuinte_Id(1L)).thenReturn(Collections.emptyList());
 
         List<Divida> result = dividaService.findAllByContribuinteId(1L);
         assertTrue(result.isEmpty());
-        verify(dividaRepository, times(1)).findAllByDebitoOrigem_Contribuinte_Id(1L);
+        verify(dividaRepository, times(1)).findAllByDebito_Contribuinte_Id(1L);
     }
 
     @Test
@@ -228,7 +228,7 @@ class DividaServiceTest {
         debito.setContribuinte(contribuinte);
 
         Divida divida = new Divida();
-        divida.setDebitoOrigem(debito);
+        divida.setDebito(debito);
         divida.setSituacaoGuia(SituacaoGuia.ABERTA);
         divida.setValorLancado(new BigDecimal("200.00"));
         divida.setValorAcrescimo(new BigDecimal("50.00"));

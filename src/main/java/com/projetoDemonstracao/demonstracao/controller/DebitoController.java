@@ -3,6 +3,7 @@ package com.projetoDemonstracao.demonstracao.controller;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.dto.ResponseDto;
+import com.projetoDemonstracao.demonstracao.dto.entityCreate.DebitoCreateDTO;
 import com.projetoDemonstracao.demonstracao.service.DebitoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,8 @@ public class DebitoController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto<Debito>> create(@RequestBody Debito debito) {
+    public ResponseEntity<ResponseDto<Debito>> create(@RequestBody DebitoCreateDTO debitoCreateDTO) {
+        Debito debito = debitoCreateDTO.toDebito();
         Debito novoDebito = debitoService.save(debito);
         ResponseDto<Debito> response = new ResponseDto<>(true, "Debito criado com sucesso", novoDebito);
         return ResponseEntity.ok(response);

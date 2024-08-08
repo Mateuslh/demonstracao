@@ -4,6 +4,7 @@ import com.projetoDemonstracao.demonstracao.domain.Contribuinte;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.dto.ResponseDto;
+import com.projetoDemonstracao.demonstracao.dto.entityCreate.ContribuinteCreateDTO;
 import com.projetoDemonstracao.demonstracao.service.ContribuinteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,14 +41,16 @@ public class ContribuinteController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto<Contribuinte>> create(@RequestBody Contribuinte contribuinte) {
+    public ResponseEntity<ResponseDto<Contribuinte>> create(@RequestBody ContribuinteCreateDTO contribuinteDTO) {
+        Contribuinte contribuinte = contribuinteDTO.toContribuinte();
         Contribuinte novoContribuinte = contribuinteService.save(contribuinte);
         ResponseDto<Contribuinte> response = new ResponseDto<>(true, "Contribuinte criado com sucesso", novoContribuinte);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseDto<Contribuinte>> update(@PathVariable Long id, @RequestBody Contribuinte contribuinte) {
+    public ResponseEntity<ResponseDto<Contribuinte>> update(@PathVariable Long id, @RequestBody ContribuinteCreateDTO contribuinteCreateDTO) {
+        Contribuinte contribuinte = contribuinteCreateDTO.toContribuinte();
         contribuinte.setId(id);
         Contribuinte contribuinteAtualizado = contribuinteService.save(contribuinte);
         ResponseDto<Contribuinte> response = new ResponseDto<>(true, "Contribuinte atualizado com sucesso", contribuinteAtualizado);

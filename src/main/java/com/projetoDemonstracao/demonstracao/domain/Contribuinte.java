@@ -26,4 +26,8 @@ public class Contribuinte {
     private String nome;
 
     private String email;
+
+    public Contribuinte(Long id) {
+        this.id = id;
+    }
 }

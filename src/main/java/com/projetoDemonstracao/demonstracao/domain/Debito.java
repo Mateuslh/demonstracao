@@ -34,4 +34,7 @@ public class Debito {
     private BigDecimal valorAcrescimo;
 
     private BigDecimal valorPago;
+
+    public Debito(Long id) {
+    }
 }

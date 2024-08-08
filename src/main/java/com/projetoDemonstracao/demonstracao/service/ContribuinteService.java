@@ -50,6 +50,6 @@ public class ContribuinteService {
     }
 
     public List<Divida> findAllDividas(Contribuinte contribuinte) {
-        return dividaRepository.findAllByDebitoOrigem_Contribuinte_Id(contribuinte.getId());
+        return dividaRepository.findAllByDebito_Contribuinte_Id(contribuinte.getId());
     }
 }
