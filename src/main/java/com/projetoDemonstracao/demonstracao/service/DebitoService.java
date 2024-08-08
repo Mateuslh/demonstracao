@@ -1,13 +1,9 @@
 package com.projetoDemonstracao.demonstracao.service;
 
-import com.projetoDemonstracao.demonstracao.domain.Contribuinte;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.enums.SituacaoGuia;
-import com.projetoDemonstracao.demonstracao.exception.DebitoNaoAbertoInscreverException;
-import com.projetoDemonstracao.demonstracao.exception.EntidadeNaoEncontradaException;
-import com.projetoDemonstracao.demonstracao.exception.GuiaNaoAbertaParaPagamentoException;
-import com.projetoDemonstracao.demonstracao.exception.GuiaSemSaldoAbaterException;
+import com.projetoDemonstracao.demonstracao.exception.*;
 import com.projetoDemonstracao.demonstracao.repository.DebitoRepository;
 import com.projetoDemonstracao.demonstracao.repository.DividaRepository;
 import jakarta.transaction.Transactional;
@@ -78,6 +74,7 @@ public class DebitoService {
         return dividaRepository.save(divida);
     }
 
+    @Transactional
     public void pagarDebito(Debito debito, BigDecimal valorPago) {
         BigDecimal valorTotalDebito = getValorTotal(debito);
         BigDecimal valorAberto = getValorAberto(debito);
@@ -90,20 +87,11 @@ public class DebitoService {
             throw new GuiaSemSaldoAbaterException("Débito sem saldo para abater.");
         }
 
-        if (valorPago.compareTo(valorAberto) > 0) {
-            BigDecimal valorRestante = valorPago.subtract(valorAberto);
-            Contribuinte contribuinte = debito.getContribuinte();
-            BigDecimal saldoAtual = nullToZero(contribuinte.getSaldo());
-            BigDecimal novoSaldo = saldoAtual.add(valorRestante);
-            contribuinte.setSaldo(novoSaldo);
+        if (valorAberto.compareTo(valorPago) < 0) {
+            throw new GuiaValorInferiorValorPagoException("Débito com valor em aberto inferior ao valor pago.");
         }
 
-        BigDecimal novoValorPago = nullToZero(debito.getValorPago()).add(valorPago);
-        if (novoValorPago.compareTo(valorTotalDebito) > 0) {
-            novoValorPago = valorTotalDebito;
-        }
-        debito.setValorPago(novoValorPago);
-
+        debito.setValorPago(debito.getValorPago().add(valorPago));
         if (getValorAberto(debito).compareTo(BigDecimal.ZERO) == 0) {
             debito.setSituacaoGuia(SituacaoGuia.PAGA);
         }

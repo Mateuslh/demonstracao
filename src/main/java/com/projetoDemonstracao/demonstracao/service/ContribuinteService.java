@@ -5,6 +5,8 @@ import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.domain.Divida;
 import com.projetoDemonstracao.demonstracao.exception.EntidadeNaoEncontradaException;
 import com.projetoDemonstracao.demonstracao.repository.ContribuinteRepository;
+import com.projetoDemonstracao.demonstracao.repository.DebitoRepository;
+import com.projetoDemonstracao.demonstracao.repository.DividaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +17,10 @@ public class ContribuinteService {
 
     @Autowired
     private ContribuinteRepository contribuinteRepository;
-
     @Autowired
-    private DebitoService debitoService;
+    private DebitoRepository debitoRepository;
     @Autowired
-    private DividaService dividaService;
+    private DividaRepository dividaRepository;
 
     public List<Contribuinte> findAll() {
         return contribuinteRepository.findAll();
@@ -39,11 +40,11 @@ public class ContribuinteService {
     }
 
     public List<Debito> findAllDebitos(Contribuinte contribuinte) {
-        return debitoService.findAllByContribuinteId(contribuinte.getId());
+        return debitoRepository.findDebitosByContribuinteId(contribuinte.getId());
     }
 
     public List<Divida> findAllDividas(Contribuinte contribuinte) {
-        return dividaService.findAllByContribuinteId(contribuinte.getId());
+        return dividaRepository.findAllByDebitoOrigem_Contribuinte_Id(contribuinte.getId());
     }
 
 }

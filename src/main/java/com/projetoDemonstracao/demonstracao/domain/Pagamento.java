@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @AllArgsConstructor
@@ -27,7 +27,7 @@ public class Pagamento {
     @JoinColumn()
     private Divida divida;
     private BigDecimal valorPago;
-    private Date dtPagamento;
+    private LocalDate dtPagamento;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DestinoPagamento destinoPagamento;

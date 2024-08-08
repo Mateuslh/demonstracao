@@ -7,6 +7,7 @@ import com.projetoDemonstracao.demonstracao.enums.SituacaoGuia;
 import com.projetoDemonstracao.demonstracao.exception.EntidadeNaoEncontradaException;
 import com.projetoDemonstracao.demonstracao.exception.GuiaNaoAbertaParaPagamentoException;
 import com.projetoDemonstracao.demonstracao.exception.GuiaSemSaldoAbaterException;
+import com.projetoDemonstracao.demonstracao.exception.GuiaValorInferiorValorPagoException;
 import com.projetoDemonstracao.demonstracao.repository.DebitoRepository;
 import com.projetoDemonstracao.demonstracao.repository.DividaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,21 +79,11 @@ public class DividaService {
             throw new GuiaSemSaldoAbaterException("Dívida sem saldo para abater.");
         }
 
-        BigDecimal valorRestante = valorPago.subtract(valorAberto);
-        if (valorRestante.compareTo(BigDecimal.ZERO) > 0) {
-            Contribuinte contribuinte = divida.getDebitoOrigem().getContribuinte();
-            BigDecimal saldoAtual = nullToZero(contribuinte.getSaldo());
-            BigDecimal novoSaldo = saldoAtual.add(valorRestante);
-            contribuinte.setSaldo(novoSaldo);
-            contribuinteService.save(contribuinte);
+        if (valorAberto.compareTo(valorPago) < 0) {
+            throw new GuiaValorInferiorValorPagoException("Dívida com valor em aberto inferior ao valor pago.");
         }
 
-        BigDecimal novoValorPago = nullToZero(divida.getValorPago()).add(valorPago);
-        if (novoValorPago.compareTo(valorTotalDebito) > 0) {
-            novoValorPago = valorTotalDebito;
-        }
-        divida.setValorPago(novoValorPago);
-
+        divida.setValorPago(divida.getValorPago().add(valorPago));
         if (getValorAberto(divida).compareTo(BigDecimal.ZERO) == 0) {
             divida.setSituacaoGuia(SituacaoGuia.PAGA);
         }
