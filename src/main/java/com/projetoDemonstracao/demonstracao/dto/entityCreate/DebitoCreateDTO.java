@@ -1,6 +1,7 @@
 package com.projetoDemonstracao.demonstracao.dto.entityCreate;
 
 import com.projetoDemonstracao.demonstracao.domain.Contribuinte;
+import com.projetoDemonstracao.demonstracao.domain.CreditoTributario;
 import com.projetoDemonstracao.demonstracao.domain.Debito;
 import com.projetoDemonstracao.demonstracao.dto.entityId.ContribuinteIdDTO;
 import com.projetoDemonstracao.demonstracao.enums.SituacaoGuia;
@@ -21,6 +22,8 @@ public class DebitoCreateDTO {
 
     private ContribuinteIdDTO contribuinte;
 
+    private CreditoTributario creditoTributario;
+
     @Enumerated(EnumType.STRING)
     private SituacaoGuia situacaoGuia;
 
@@ -37,6 +40,7 @@ public class DebitoCreateDTO {
         if (contribuinte != null && contribuinte.getId() != null) {
             debito.setContribuinte(new Contribuinte(contribuinte.getId()));
         }
+        debito.setCreditoTributario(creditoTributario);
         debito.setSituacaoGuia(situacaoGuia);
         debito.setValorLancado(valorLancado);
         debito.setValorDesconto(valorDesconto);

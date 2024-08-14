@@ -1,0 +1,15 @@
+package com.projetoDemonstracao.demonstracao.enums;
+
+public enum TipoCadastro {
+    CONTRIBUICAO_MELHORIAS,
+    CONTRIBUINTE,
+    ECONOMICOS,
+    ECONOMICO_ATIVIDADE,
+    IMOVEIS,
+    RECEITAS_DIVERSAS,
+    PARCELAMENTOS,
+    TRANSFERENCIA_IMOVEIS,
+    NOTA_FISCAL_AVULSA,
+    AUTO_INFRACAO,
+    PROJETOS
+}

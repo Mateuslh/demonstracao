@@ -24,6 +24,10 @@ public class Debito {
     @JoinColumn(nullable = false)
     private Contribuinte contribuinte;
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private CreditoTributario creditoTributario;
+
     @Enumerated(EnumType.STRING)
     private SituacaoGuia situacaoGuia;
 
